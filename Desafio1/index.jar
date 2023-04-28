@@ -1,0 +1,87 @@
+public class ContaCorrente {
+    private double saldo;
+
+    public ContaCorrente(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void sacar(double valor) {
+        saldo -= valor;
+    }
+}
+
+public class ContaSalario {
+    private double saldo;
+
+    public ContaSalario(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void sacar(double valor) {
+        saldo -= valor;
+    }
+}
+
+public class ContaPoupanca {
+    private double saldo;
+
+    public ContaPoupanca(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void sacar(double valor) {
+        saldo -= valor;
+    }
+}
+
+public class ContaInvestimento {
+    private double saldo;
+
+    public ContaInvestimento(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void sacar(double valor) {
+        saldo -= valor;
+    }
+}
+
+public aspect VerificacaoSaldoAspect {
+    pointcut operacaoSaque() : execution(void sacar(double)) && within(ContaCorrente) || within(ContaSalario) || within(ContaPoupanca) || within(ContaInvestimento);
+
+    before(double valor) : operacaoSaque() {
+        if (thisJoinPoint.getThis() instanceof ContaCorrente) {
+            ContaCorrente conta = (ContaCorrente) thisJoinPoint.getThis();
+            if (conta.getSaldo() < valor) {
+                System.out.println("Saldo insuficiente para realizar saque na conta corrente.");
+                throw new SaldoInsuficienteException();
+            }
+        } else if (thisJoinPoint.getThis() instanceof ContaSalario) {
+            ContaSalario conta = (ContaSalario) thisJoinPoint.getThis();
+            if (conta.getSaldo() < valor) {
+                System.out.println("Saldo insuficiente para realizar saque na conta salário.");
+                throw new SaldoInsuficienteException();
+            }
+        } else if (thisJoinPoint.getThis() instanceof ContaPoupanca) {
+            ContaPoupanca conta = (ContaPoupanca) thisJoinPoint.getThis();
+            if (conta.getSaldo() < valor) {
+                System.out.println("Saldo insuficiente para realizar saque na conta poupança.");
+                throw new SaldoInsuficienteException();
+            }
+        } else if (thisJoinPoint.get
